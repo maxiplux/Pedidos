@@ -41,8 +41,8 @@ import cz.msebera.android.httpclient.Header;
 public class LoginActivity extends AppCompatActivity implements Validator.ValidationListener {
 
 
-    @InjectView(R.id.TxtLogView)
-    TextView TxtLogView;
+
+
     private String URL_BASE = "http://boiling-harbor-95559.herokuapp.com/";
     private String LOGIN_URI = "rest-auth/login/";
     private String REGISTER_URI = "rest-auth/registration/";
@@ -95,24 +95,59 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
 
 
-        String url = URL_BASE + REGISTER_URI;
+
+
+
+    }
+
+
+    @OnClick({R.id.BtnLogin, R.id.BtnRegistrar})
+    public void onClick(View view) {
+
+
+
+        switch (view.getId()) {
+
+            case R.id.BtnLogin:
+                Login(view);
+
+            case R.id.BtnRegistrar:
+                Registrar(view);
+
+        }
+
+
+    }
+
+
+    private void Registrar(View view) {
+
+        Intent intent = new Intent(this, RegistroActivity.class);
+        startActivity(intent);
+    }
+
+    private void Login(View view) {
+
+
+        validator.validate();
+        String url = URL_BASE + LOGIN_URI;
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        String email = this.inputEmail.getText().toString(); ;
         String Username = this.inputEmail.getText().toString();
-        String Password = this.inputEmail.getText().toString();;
+        String Password = this.inputPassword.getText().toString();;
 
 
-        params.put("email", email);
+
         params.put("username", Username);
-        params.put("password1", Password);
-        params.put("password2", Password);
+        params.put("password", Password);
+
 
 
         //client.setMaxRetriesAndTimeout(10,30);
-        client.post(url, params, new BaseJsonHttpResponseHandler() {
+        client.post(url, params, new BaseJsonHttpResponseHandler()
+        {
 
 
             @Override
@@ -124,11 +159,7 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
                 model_simple_token = gson.fromJson(jsonObject.toString(), ModelSimpleToken.class);
 
-                /*Log.e("como fue", rawJsonData);
-                Log.e("como fue", rawJsonData);
-                Log.e("tokenvalido", String.valueOf(model_simple_token.tokenValido()));
-                Log.e("email", String.valueOf(model_simple_token.getEmail().size()));
-                Log.e("username", String.valueOf(model_simple_token.getUsername().size()));*/
+
 
 
                 if (model_simple_token.tokenValido() == false )
@@ -187,6 +218,9 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
                             .setContentText("Bienvenido")
                             .show();
 
+                    Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
+                    startActivity(intent);
+
                 }
 
 
@@ -208,46 +242,21 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 Log.e("codigo", String.valueOf(statusCode));
-                TxtLogView.setText(t.toString());
                 Log.e("el que", t.toString());
+
+
             }
 
 
         });
 
 
-    }
 
 
-    @OnClick({R.id.BtnLogin, R.id.BtnRegistrar})
-    public void onClick(View view) {
-
-        validator.validate();
-
-        switch (view.getId()) {
-
-            case R.id.BtnLogin:
-                Login(view);
-
-            case R.id.BtnRegistrar:
-                Registrar(view);
-
-        }
 
 
-    }
 
 
-    private void Registrar(View view) {
-
-        Intent intent = new Intent(this, RegistroActivity.class);
-        startActivity(intent);
-    }
-
-    private void Login(View view) {
-
-        Intent intent = new Intent(this, ListaProductosActivity.class);
-        startActivity(intent);
     }
 
     @Override
