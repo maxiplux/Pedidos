@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Material Login Example</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in_short">Login Corto</string>
+    <string name="action_sign_in">Login</string>
+    <string name="Registrar">Registro</string>
+    <string name="HeadLabelLogin">Ingresar</string>
+    <string name="HeadLabelRegistro">Registro</string>
+    <string name="HeadLabelListaProductos">Lista Productos</string>
+</resources>
