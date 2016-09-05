@@ -73,6 +73,17 @@ public class ModelSimpleToken {
         this.non_field_errors = non_field_errors;
     }
 
+
+    public String getNon_field_errorsMsg()
+    {
+        if (non_field_errors.size()>0)
+        {
+            return  this.getNon_field_errors().get(0);
+        }
+        return "";
+    }
+
+
     public String getDetail() {
         return detail;
     }

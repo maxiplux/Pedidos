@@ -15,6 +15,7 @@
         android:weightSum="1"
         android:theme="@style/AppTheme.Dark">
 
+
         <ImageView android:src="@drawable/delivery"
             android:layout_width="186dp"
             android:layout_height="72dp"
@@ -23,6 +24,13 @@
             android:layout_weight="0.98" />
 
         <!--  Name Label -->
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="336dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:hint="Name" />
         </android.support.design.widget.TextInputLayout>
 
@@ -45,6 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:hint="Email" />
         </android.support.design.widget.TextInputLayout>
 
@@ -58,6 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:hint="Password" />
         </android.support.design.widget.TextInputLayout>
 

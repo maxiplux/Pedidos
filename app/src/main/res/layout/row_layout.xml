@@ -1,36 +1,96 @@
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    card_view:cardCornerRadius="5dp">
+    android:layout_height="380dp"
+    android:layout_margin="8dp"
+
+
+    card_view:contentPaddingTop="1dp"
+    card_view:contentPaddingLeft="1dp"
+    card_view:contentPaddingBottom="1dp"
+    card_view:contentPaddingRight="1dp"
+
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="5dp"
+
+
+
+    >
 
     <RelativeLayout
+
+
+
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:id="@+id/img_android"
-            android:layout_alignParentLeft="true"
+            android:id="@+id/Row.Producto.Imagen"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="20dp"/>
+            android:scaleType="centerCrop"
+             />
+
+
 
         <TextView
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
+            android:id="@+id/Row.Producto.Nombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_android"
+            android:layout_below="@+id/Row.Producto.Imagen"
+            android:maxLines="3"
+            android:padding="8dp"
+            android:text="Titulo"
+            android:textAlignment="center"
+            android:textColor="#222"
             android:textStyle="bold"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/img_android" />
+            android:textSize="22dp" />
+
+
+
+    <RelativeLayout
+        android:id="@+id/InnerRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/Row.Producto.Nombre"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:maxLines="10"
+
+            android:id="@+id/Row.Producto.Descripcion"
+            android:padding="8dp"
+            android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas Letraset, las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum."
+            android:textColor="#666"
+            android:textSize="10sp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

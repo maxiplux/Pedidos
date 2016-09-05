@@ -5,58 +5,113 @@ import com.orm.SugarRecord;
 /**
  * Created by franc on 29/08/2016.
  */
+
+
+
 public class Producto extends SugarRecord {
-    String Nombre;
-    String Descripcion;
-    String Imagen;
-    Float Valor;
-    Float Iva;
 
-    // Default constructor is necessary for SugarRecord
-    public Producto() {
+    String nombre;
 
+    public Producto(String nombre, String creado, String modificado, String activo, String descripcion, String imagen, String valor, String iva) {
+        this.nombre = nombre;
+        this.creado = creado;
+        this.modificado = modificado;
+        this.activo = activo;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.valor = valor;
+        this.iva = iva;
     }
 
+    String creado;
+    String modificado;
+    String activo;
+    String descripcion;
+    String imagen;
+    String valor;
+    String iva;
+
+    public Producto()
+    {
+    }
+
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "nombre='" + nombre + '\'' +
+                ", creado='" + creado + '\'' +
+                ", modificado='" + modificado + '\'' +
+                ", activo='" + activo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", imagen='" + imagen + '\'' +
+                ", valor='" + valor + '\'' +
+                ", iva='" + iva + '\'' +
+                '}';
+    }
+
+
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
     public void setNombre(String nombre) {
-        Nombre = nombre;
+        this.nombre = nombre;
+    }
+
+    public String getCreado() {
+        return creado;
+    }
+
+    public void setCreado(String creado) {
+        this.creado = creado;
+    }
+
+    public String getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(String modificado) {
+        this.modificado = modificado;
+    }
+
+    public String getActivo() {
+        return activo;
+    }
+
+    public void setActivo(String activo) {
+        this.activo = activo;
     }
 
     public String getDescripcion() {
-        return Descripcion;
+        return descripcion;
     }
 
     public void setDescripcion(String descripcion) {
-        Descripcion = descripcion;
+        this.descripcion = descripcion;
     }
 
     public String getImagen() {
-        return Imagen;
+        return imagen;
     }
 
     public void setImagen(String imagen) {
-        Imagen = imagen;
+        this.imagen = imagen;
     }
 
-    public Float getValor() {
-        return Valor;
+    public String getValor() {
+        return valor;
     }
 
-    public void setValor(Float valor) {
-        Valor = valor;
+    public void setValor(String valor) {
+        this.valor = valor;
     }
 
-    public Float getIva() {
-        return Iva;
+    public String getIva() {
+        return iva;
     }
 
-    public void setIva(Float iva) {
-        Iva = iva;
+    public void setIva(String iva) {
+        this.iva = iva;
     }
-
-
-
 }

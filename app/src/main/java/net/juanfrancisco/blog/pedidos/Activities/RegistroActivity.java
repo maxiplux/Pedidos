@@ -1,12 +1,14 @@
 package net.juanfrancisco.blog.pedidos.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -65,6 +67,9 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
 
     ModelSimpleToken model_simple_token;
 
+    private ProgressBar spinner;
+    SharedPreferences pref ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,15 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
 
         setContentView(R.layout.activity_signup);
         ButterKnife.inject(this);
+        model_simple_token=new ModelSimpleToken();
+
+
+
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
 
 
 
@@ -83,14 +97,18 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
     }
 
     @OnClick({R.id.BtnCrearCuenta, R.id.BtnLogin})
-    public void onClick(View view) {
-        validator.validate();
+    public void onClick(View view)
+    {
 
-        switch (view.getId()) {
+
+        switch (view.getId())
+        {
             case R.id.BtnCrearCuenta:
                 CrearCuenta();
+                break;
             case R.id.BtnLogin:
                 Login();
+                break;
         }
     }
 
@@ -99,9 +117,17 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
         startActivity(intent);
     }
 
-    private void CrearCuenta() {
+    private void CrearCuenta()
+    {
+
+        spinner.setVisibility(View.VISIBLE);
+        //validator.validate();
         //Intent intent = new Intent(this, ListaProductosActivity.class);
         //startActivity(intent);
+
+
+
+
 
         String url = URL_BASE + REGISTER_URI;
 
@@ -119,8 +145,13 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
         params.put("password2", Password);
 
 
+
+
+
+
         //client.setMaxRetriesAndTimeout(10,30);
-        client.post(url, params, new BaseJsonHttpResponseHandler() {
+        client.post(url, params, new BaseJsonHttpResponseHandler()
+        {
 
 
             @Override
@@ -132,11 +163,13 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
 
                 model_simple_token = gson.fromJson(jsonObject.toString(), ModelSimpleToken.class);
 
-                /*Log.e("como fue", rawJsonData);
+                Log.e("como fue", rawJsonData);
                 Log.e("como fue", rawJsonData);
                 Log.e("tokenvalido", String.valueOf(model_simple_token.tokenValido()));
                 Log.e("email", String.valueOf(model_simple_token.getEmail().size()));
-                Log.e("username", String.valueOf(model_simple_token.getUsername().size()));*/
+                Log.e("username", String.valueOf(model_simple_token.getUsername().size()));
+
+
 
 
                 if (model_simple_token.tokenValido() == false )
@@ -147,10 +180,11 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
                         runOnUiThread(new Runnable() {
                             public void run()
                             {
+                                spinner.setVisibility(View.INVISIBLE);
 
                                 new SweetAlertDialog(RegistroActivity.this, SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Oops...")
-                                        .setContentText(model_simple_token.getUsernameMsg())
+                                        .setContentText("Usuario: "+model_simple_token.getUsernameMsg())
                                         .show();
                             }
                         });
@@ -162,9 +196,10 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
                         runOnUiThread(new Runnable() {
                             public void run()
                             {
+                                spinner.setVisibility(View.INVISIBLE);
                                 new SweetAlertDialog(RegistroActivity.this, SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Oops...")
-                                        .setContentText(model_simple_token.getEmailMsg())
+                                        .setContentText("Email: "+model_simple_token.getEmailMsg())
                                         .show();
                             }
                         });
@@ -176,9 +211,10 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
                         runOnUiThread(new Runnable() {
                             public void run()
                             {
+                                spinner.setVisibility(View.INVISIBLE);
                                 new SweetAlertDialog(RegistroActivity.this, SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Oops...")
-                                        .setContentText(model_simple_token.getPassword1Msg())
+                                        .setContentText("Password: "+model_simple_token.getPassword1Msg())
                                         .show();
                             }
                         });
@@ -190,13 +226,43 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
                 else {
 
 
-                    new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.SUCCESS_TYPE)
-                            .setTitleText("Exitos...")
-                            .setContentText("Bienvenido")
-                            .show();
+
+                    runOnUiThread(new Runnable()
+
+                    {
+                        public void run()
+                        {
+                            spinner.setVisibility(View.INVISIBLE);
+                            new SweetAlertDialog(RegistroActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("Exito")
+                                    .setContentText("Usuario creado con exito!")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog)
+                                        {
+                                            sDialog.dismissWithAnimation();
+
+                                            SharedPreferences.Editor editor = pref.edit();
+
+                                            editor.putString("TOKEN", model_simple_token.getKey()); // Storing boolean - true/false
+                                            editor.commit(); // commit changes
+
+
+
+
+                                            Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
+                                            intent.putExtra("TOKEN", model_simple_token.getKey());
+                                            startActivity(intent);
+
+                                        }
+                                    }).show();
+
+
+                        }
+                    });
 
                 }
-
 
                 return null;
             }
@@ -212,7 +278,11 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable t, String rawJsonData, Object errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, Throwable t, String rawJsonData, Object errorResponse)
+
+            {
+
+                spinner.setVisibility(View.INVISIBLE);
 
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 Log.e("codigo", String.valueOf(statusCode));

@@ -3,6 +3,7 @@ package net.juanfrancisco.blog.pedidos.Activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +76,10 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
     ModelSimpleToken model_simple_token;
 
 
+    private ProgressBar spinner;
+    SharedPreferences pref ;
+    String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -93,8 +99,17 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         validator.setValidationListener(this);
 
 
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
 
-
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        token = pref.getString("TOKEN", null); // si tiene token enviarlo a la lista
+        if (token.length()>30)
+        {
+            Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
+            intent.putExtra("TOKEN", token);
+            startActivity(intent);
+        }
 
 
 
@@ -110,9 +125,11 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
             case R.id.BtnLogin:
                 Login(view);
+                break;
 
             case R.id.BtnRegistrar:
                 Registrar(view);
+                break;
 
         }
 
@@ -126,10 +143,12 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         startActivity(intent);
     }
 
-    private void Login(View view) {
+    private void Login(View view)
+    {
 
 
-        validator.validate();
+        spinner.setVisibility(View.VISIBLE);
+
         String url = URL_BASE + LOGIN_URI;
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -180,14 +199,14 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
 
                     }
-                    else if (model_simple_token.getEmail().size() > 0)
+                    else if (model_simple_token.getNon_field_errors().size() > 0)
                     {
                         runOnUiThread(new Runnable() {
                             public void run()
                             {
                                 new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Oops...")
-                                        .setContentText(model_simple_token.getEmailMsg())
+                                        .setContentText("Error"+model_simple_token.getNon_field_errorsMsg())
                                         .show();
                             }
                         });
@@ -213,13 +232,39 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
                 else {
 
 
-                    new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.SUCCESS_TYPE)
-                            .setTitleText("Exitos...")
-                            .setContentText("Bienvenido")
-                            .show();
+                    runOnUiThread(new Runnable()
 
-                    Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
-                    startActivity(intent);
+                    {
+                        public void run()
+                        {
+                            spinner.setVisibility(View.INVISIBLE);
+                            new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("Exito")
+                                    .setContentText("Bienvenido!")
+                                    .setConfirmClickListener(
+                                            new SweetAlertDialog.OnSweetClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog)
+                                        {
+                                            sDialog.dismissWithAnimation();
+                                            SharedPreferences.Editor editor = pref.edit();
+
+
+                                            editor.putString("TOKEN", model_simple_token.getKey()); // Storing boolean - true/false
+                                            editor.commit(); // commit changes
+                                            Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
+                                            intent.putExtra("TOKEN", model_simple_token.getKey());
+                                            startActivity(intent);
+
+                                        }
+                                    }).show();
+
+
+                        }
+                    });
+
+
 
                 }
 
@@ -267,7 +312,8 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
 
-        for (ValidationError error : errors) {
+        for (ValidationError error : errors)
+        {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
 
