@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -19,7 +18,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -34,8 +32,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
@@ -43,42 +41,30 @@ import cz.msebera.android.httpclient.Header;
 public class LoginActivity extends AppCompatActivity implements Validator.ValidationListener {
 
 
-
-
-    private String URL_BASE = "http://boiling-harbor-95559.herokuapp.com/";
-    private String LOGIN_URI = "rest-auth/login/";
-    private String REGISTER_URI = "rest-auth/registration/";
-    private String LOGOUT_URI = "rest-auth/registration/";
-
+    public ProgressDialog loginDialog;
     @NotEmpty
     @Email(sequence = 1, message = "El email es obligatorio")
-    @InjectView(R.id.input_email)
+    @BindView(R.id.input_email)
     EditText inputEmail;
-
-
+    @NotEmpty
     @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS)
-    @InjectView(R.id.input_password)
+    @BindView(R.id.input_password)
     EditText inputPassword;
-
-
-    @InjectView(R.id.BtnLogin)
+    @BindView(R.id.BtnLogin)
     AppCompatButton BtnLogin;
-    @InjectView(R.id.BtnRegistrar)
+    @BindView(R.id.BtnRegistrar)
     TextView linkSignup;
-
-
-
     Validator validator;
     Context context;
     SweetAlertDialog dialogo;
-    public ProgressDialog loginDialog;
-
     ModelSimpleToken model_simple_token;
-
-
-    private ProgressBar spinner;
     SharedPreferences pref ;
-    String token;
+    String token = "";
+    private String URL_BASE = "http://servicios.testbox.site/";
+    private String LOGIN_URI = "rest-auth/login/";
+    private String REGISTER_URI = "rest-auth/registration/";
+    private String LOGOUT_URI = "rest-auth/registration/";
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         context=this;
         loginDialog = new ProgressDialog( getApplicationContext());
 
@@ -104,12 +90,17 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         token = pref.getString("TOKEN", null); // si tiene token enviarlo a la lista
-        if (token.length()>30)
+        if (token != null)
         {
-            Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
-            intent.putExtra("TOKEN", token);
-            startActivity(intent);
+            if (token.length() > 30) {
+                Intent intent = new Intent(getApplicationContext(), ListaProductosActivity.class);
+                intent.putExtra("TOKEN", token);
+                startActivity(intent);
+            }
+
+
         }
+
 
 
 
@@ -155,8 +146,7 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         RequestParams params = new RequestParams();
 
         String Username = this.inputEmail.getText().toString();
-        String Password = this.inputPassword.getText().toString();;
-
+        String Password = this.inputPassword.getText().toString();
 
 
         params.put("username", Username);

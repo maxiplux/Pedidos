@@ -28,8 +28,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
@@ -37,39 +37,28 @@ import cz.msebera.android.httpclient.Header;
 public class RegistroActivity extends AppCompatActivity implements Validator.ValidationListener {
 
 
-    private String URL_BASE = "http://boiling-harbor-95559.herokuapp.com/";
+    @BindView(R.id.TxtNombre)
+    EditText TxtNombre;
+    @NotEmpty
+    @Email
+    @BindView(R.id.TxtEmail)
+    EditText inputEmail;
+    @NotEmpty
+    @BindView(R.id.TxtPassword)
+    EditText TxtPassword;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @BindView(R.id.BtnCrearCuenta)
+    AppCompatButton BtnCrearCuenta;
+    @BindView(R.id.BtnLogin)
+    AppCompatButton BtnLogin;
+    Validator validator;
+    ModelSimpleToken model_simple_token;
+    SharedPreferences pref ;
+    private String URL_BASE = "http://servicios.testbox.site/";
     private String LOGIN_URI = "rest-auth/login/";
     private String REGISTER_URI = "rest-auth/registration/";
     private String LOGOUT_URI = "rest-auth/registration/";
-
-    @InjectView(R.id.TxtNombre)     EditText TxtNombre;
-
-
-    @NotEmpty
-    @Email
-    @InjectView(R.id.TxtEmail)     EditText inputEmail;
-
-    @NotEmpty
-    @InjectView(R.id.TxtPassword)    EditText TxtPassword;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    @InjectView(R.id.BtnCrearCuenta)
-    AppCompatButton BtnCrearCuenta;
-    @InjectView(R.id.BtnLogin)
-    AppCompatButton BtnLogin;
-
-
-
-
-
-    Validator validator;
-
-
-    ModelSimpleToken model_simple_token;
-
     private ProgressBar spinner;
-    SharedPreferences pref ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +68,7 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
         validator.setValidationListener(this);
 
         setContentView(R.layout.activity_signup);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         model_simple_token=new ModelSimpleToken();
 
 
@@ -134,9 +123,9 @@ public class RegistroActivity extends AppCompatActivity implements Validator.Val
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        String email = this.inputEmail.getText().toString(); ;
+        String email = this.inputEmail.getText().toString();
         String Username = this.inputEmail.getText().toString();
-        String Password = this.TxtPassword.getText().toString();;
+        String Password = this.TxtPassword.getText().toString();
 
 
         params.put("email", email);

@@ -1,29 +1,18 @@
 package net.juanfrancisco.blog.pedidos.Services;
 
-import android.net.PskKeyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
-import cz.msebera.android.httpclient.Header;
-
-import org.json.JSONObject;
-
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mobsandgeeks.saripaar.annotation.Password;
 
 import net.juanfrancisco.blog.pedidos.Models.ModelSimpleToken;
-import net.juanfrancisco.blog.pedidos.Models.Token;
 
 import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by franc on 02/09/2016.
@@ -31,7 +20,7 @@ import org.json.JSONObject;
 public class UtilUserServices
 {
 
-    private String URL_BASE="http://boiling-harbor-95559.herokuapp.com/";
+    private String URL_BASE = "http://servicios.testbox.site/";
     private String LOGIN_URI = "rest-auth/login/";
     private String REGISTER_URI = "rest-auth/registration/";
     private String LOGOUT_URI = "rest-auth/registration/";
@@ -64,7 +53,7 @@ public class UtilUserServices
             {
                  Gson gson = new GsonBuilder().create();
 
-                 model_simple_token[0] = (ModelSimpleToken) gson.fromJson(response.toString(), ModelSimpleToken.class);
+                model_simple_token[0] = gson.fromJson(response.toString(), ModelSimpleToken.class);
 
                 // Handle resulting parsed JSON response here
             }

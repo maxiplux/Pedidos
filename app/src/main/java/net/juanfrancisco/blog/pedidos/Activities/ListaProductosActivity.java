@@ -2,31 +2,23 @@ package net.juanfrancisco.blog.pedidos.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
-import com.orm.SugarContext;
-import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import net.juanfrancisco.blog.pedidos.Adapters.DataAdapter;
 import net.juanfrancisco.blog.pedidos.Models.AndroidVersion;
-import net.juanfrancisco.blog.pedidos.Models.ModelSimpleToken;
 import net.juanfrancisco.blog.pedidos.Models.Producto;
 import net.juanfrancisco.blog.pedidos.R;
 import net.juanfrancisco.blog.pedidos.Services.ProductoServices;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +28,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class ListaProductosActivity extends AppCompatActivity {
 
-
-
-    private String URL_BASE = "http://boiling-harbor-95559.herokuapp.com/";
-    private String PRODUCTOS_URI = "api/v1/productos/";
-    String rawJsonData;
 
 
     private final String android_version_names[] = {
@@ -55,7 +42,6 @@ public class ListaProductosActivity extends AppCompatActivity {
             "Lollipop",
             "Marshmallow"
     };
-
     private final String android_image_urls[] =
             {
             "http://api.learn2crack.com/android/images/donut.png",
@@ -69,10 +55,12 @@ public class ListaProductosActivity extends AppCompatActivity {
             "http://api.learn2crack.com/android/images/lollipop.png",
             "http://api.learn2crack.com/android/images/marshmallow.png"
     };
-
+    String rawJsonData;
     SharedPreferences pref ;
     String token;
     ProductoServices product_services;
+    private String URL_BASE = "http://servicios.testbox.site/";
+    private String PRODUCTOS_URI = "api/v1/productos/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
